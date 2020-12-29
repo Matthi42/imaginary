@@ -5,11 +5,13 @@ import java.util.LinkedList;
 public class Board {
     private char[][] board;
     private Koordinate ship;
-    private LinkedList<Koordinate> satelliten;
+    private ArrayList<Koordinate> satelliten;
     private Koordinate astronaut;
     private LinkedList<Board> vorganger;
 
-    public Board(Koordinate ship, LinkedList<Koordinate> satelliten, Koordinate astronaut) {
+
+
+    public Board(Koordinate ship, ArrayList<Koordinate> satelliten, Koordinate astronaut) {
         this.board = new char[7][7];
         for (int i = 0; i < 7; i++) {
             for (int u = 0; u < 7; u++) {
@@ -28,7 +30,12 @@ public class Board {
         this.astronaut=astronaut;
     }
 
-    public Board(){};
+    public Board(Board b){
+        this.board=b.getBoard();
+        this.astronaut=b.getAstronaut();
+        this.ship=b.getShip();
+        this.satelliten=b.getSatelliten();
+    };
 
 
     public ArrayList<Tupel<Koordinate>> moves() {
@@ -47,7 +54,6 @@ public class Board {
                             }
                             if (flag)
                                 moves.add(new Tupel<>(sat, new Koordinate(ziel.getX(), ziel.getY() + 1)));
-                            flag = true;
                         } else {
                             for (int i = sat.getY() + 1; i < ziel.getY(); i++) {
                                 if (((board[ziel.getX()][i] == 'S') || (board[ziel.getX()][i] == 'A'))) {
@@ -57,32 +63,31 @@ public class Board {
                             }
                             if (flag)
                                 moves.add(new Tupel<>(sat, new Koordinate(ziel.getX(), ziel.getY() - 1)));
-                            flag = true;
                         }
+                        flag = true;
                     }
 
                     if (sat.getY() == ziel.getY()&& Math.abs(sat.getX()-ziel.getX())>1) {
                         if (sat.getX() > ziel.getX()) {
                             for (int i = ziel.getX() + 1; i < sat.getX(); i++) {
-                                if (((board[ziel.getY()][i] == 'S') || (board[ziel.getY()][i] == 'A'))) {
+                                if (((board[i][ziel.getY()] == 'S') || (board[i][ziel.getY()] == 'A'))) {
                                     flag = false;
                                     break;
                                 }
                             }
                             if (flag)
-                                moves.add(new Tupel<>(sat, new Koordinate(ziel.getY(), ziel.getX() + 1)));
-                            flag = true;
+                                moves.add(new Tupel<>(sat, new Koordinate(ziel.getX() + 1, ziel.getY())));
                         } else {
                             for (int i = sat.getX() + 1; i < ziel.getX(); i++) {
-                                if (((board[ziel.getY()][i] == 'S') || (board[ziel.getY()][i] == 'A'))) {
+                                if (((board[i][ziel.getY()] == 'S') || (board[i][ziel.getY()] == 'A'))) {
                                     flag = false;
                                     break;
                                 }
                             }
                             if (flag)
-                                moves.add(new Tupel<>(sat, new Koordinate(ziel.getY(), ziel.getX() - 1)));
-                            flag = true;
+                                moves.add(new Tupel<>(sat, new Koordinate(ziel.getX() - 1, ziel.getY())));
                         }
+                        flag = true;
 
                     }
 
@@ -114,11 +119,11 @@ public class Board {
 
     public Board moveNew(Tupel<Koordinate> a) {
         Board returnBoard =this;
-        Iterator<Koordinate> iterator = satelliten.iterator();
+        Iterator<Koordinate> iterator = returnBoard.satelliten.iterator();
         int i=0;
         while (iterator.hasNext()) {
             if(iterator.next().equals(a.getFirst())){
-                satelliten.set(i,a.getSecond());
+                returnBoard.satelliten.set(i,a.getSecond());
                 break;
             }
             i++;
@@ -128,13 +133,14 @@ public class Board {
         }
         else {
             returnBoard.board[a.getSecond().getX()][a.getSecond().getY()] = 'A';
-            this.astronaut=new Koordinate(a.getSecond().getX(),a.getSecond().getY());
+            returnBoard.astronaut=new Koordinate(a.getSecond().getX(),a.getSecond().getY());
         }
-        this.board[a.getFirst().getX()][a.getFirst().getY()]=' ';
-        return returnBoard;
+        returnBoard.board[a.getFirst().getX()][a.getFirst().getY()]=' ';
+
+        return new Board(returnBoard);
     }
 
-    public LinkedList<Koordinate> getSatelliten() {
+    public ArrayList<Koordinate> getSatelliten() {
         return satelliten;
     }
 
@@ -152,6 +158,26 @@ public class Board {
 
     public void setVorganger(LinkedList<Board> vorganger) {
         this.vorganger = vorganger;
+    }
+
+    public char[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(char[][] board) {
+        this.board = board;
+    }
+
+    public void setShip(Koordinate ship) {
+        this.ship = ship;
+    }
+
+    public void setSatelliten(ArrayList<Koordinate> satelliten) {
+        this.satelliten = satelliten;
+    }
+
+    public void setAstronaut(Koordinate astronaut) {
+        this.astronaut = astronaut;
     }
 
     @Override
