@@ -6,17 +6,18 @@ public class Main {
 
 
     public static void main(String args[]){
-        ArrayList<Koordinate> Sateliten= new ArrayList<>(Arrays.asList(
-                new Koordinate(2, 0),
-                new Koordinate(3, 4)
+        LinkedList<Koordinate> Sateliten= new LinkedList<>(Arrays.asList(
+                new Koordinate(1, 2),
+                new Koordinate(4, 2),
+                new Koordinate(4, 4)
         ));
 
-        Board a=new Board(new Koordinate(3,3), Sateliten,new Koordinate(4,0));
+        Board a=new Board(new Koordinate(3,3), Sateliten,new Koordinate(1,4));
         System.out.println(a.toString());
 
 
-        Algo alex=new Algo(a);
-        alex.calculate();
+        Algorithm alex=new Algorithm(a);
+        alex.solve();
 
     }
 }

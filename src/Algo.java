@@ -8,7 +8,7 @@ public class Algo {
     private ArrayList<Board> solutions;
     private LinkedList<Board> positions;
 
-
+/*
     public Algo(Board board) {
         this.startBoard = board;
     }
@@ -60,8 +60,8 @@ public class Algo {
 
         for (Tupel<Koordinate> move: brett.moves()) {
 
-            putInMap(brett.getSatelliten());
-            solve(new Board(brett.moveNew(move)));
+            //putInMap(brett.getSatelliten());
+           // solve(new Board(brett.moveNew(move)));
         }
 
     }
@@ -80,4 +80,6 @@ public class Algo {
     public ArrayList<Board> getSolutions() {
         return solutions;
     }
+    */
+
 }

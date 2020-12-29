@@ -5,13 +5,13 @@ import java.util.LinkedList;
 public class Board {
     private char[][] board;
     private Koordinate ship;
-    private ArrayList<Koordinate> satelliten;
+    private LinkedList<Koordinate> satelliten;
     private Koordinate astronaut;
-    private LinkedList<Board> vorganger;
+    private LinkedList<Board> vorganger=new LinkedList<>();
 
 
 
-    public Board(Koordinate ship, ArrayList<Koordinate> satelliten, Koordinate astronaut) {
+    public Board(Koordinate ship, LinkedList<Koordinate> satelliten, Koordinate astronaut) {
         this.board = new char[7][7];
         for (int i = 0; i < 7; i++) {
             for (int u = 0; u < 7; u++) {
@@ -35,11 +35,12 @@ public class Board {
         this.astronaut=b.getAstronaut();
         this.ship=b.getShip();
         this.satelliten=b.getSatelliten();
-    };
+    }
+    public Board(){}
 
 
-    public ArrayList<Tupel<Koordinate>> moves() {
-        ArrayList<Tupel<Koordinate>> moves = new ArrayList<>();
+    public LinkedList<Tupel<Koordinate>> moves() {
+        LinkedList<Tupel<Koordinate>> moves = new LinkedList<>();
         boolean flag = true;
         for (Koordinate sat : satelliten) {
             for (Koordinate ziel : satelliten) {
@@ -117,8 +118,7 @@ public class Board {
         this.board[a.getFirst().getX()][a.getFirst().getY()]=' ';
     }
 
-    public Board moveNew(Tupel<Koordinate> a) {
-        Board returnBoard =this;
+    public Board moveNew(Tupel<Koordinate> a,Board returnBoard) {
         Iterator<Koordinate> iterator = returnBoard.satelliten.iterator();
         int i=0;
         while (iterator.hasNext()) {
@@ -139,8 +139,20 @@ public class Board {
 
         return new Board(returnBoard);
     }
+    public void setBoardKo(char a,int x,int y){
+        char[][] b= new char[7][7];
 
-    public ArrayList<Koordinate> getSatelliten() {
+
+        for(int w=0;w<7;w++){
+            for(int v=0;v<7;v++){
+                b[w][v]=board[w][v];
+            }
+        }
+        b[x][y]=a;
+        this.board=b;
+    }
+
+    public LinkedList<Koordinate> getSatelliten() {
         return satelliten;
     }
 
@@ -160,6 +172,10 @@ public class Board {
         this.vorganger = vorganger;
     }
 
+    public void addToVorganger(Board board){
+        this.vorganger.add(board);
+    }
+
     public char[][] getBoard() {
         return board;
     }
@@ -172,7 +188,7 @@ public class Board {
         this.ship = ship;
     }
 
-    public void setSatelliten(ArrayList<Koordinate> satelliten) {
+    public void setSatelliten(LinkedList<Koordinate> satelliten) {
         this.satelliten = satelliten;
     }
 
