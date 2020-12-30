@@ -1,4 +1,4 @@
-public class Koordinate {
+public class Koordinate implements Cloneable{
     private int x;
     private int y;
 
@@ -32,6 +32,15 @@ public class Koordinate {
         return false;
     }
 
+    @Override
+    public Object clone()  {
+        try {
+            return super.clone();
+        }catch (CloneNotSupportedException e){
+            System.out.println("cloning not allowed");
+            return this;
+        }
+    }
 
     @Override
     public String toString(){

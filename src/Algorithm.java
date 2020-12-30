@@ -10,16 +10,13 @@ public class Algorithm {
 
 
     public Algorithm(Board startBoard){
-        this.startBoard=startBoard;
-        this.Warteschlange.add(new Tup<>(startBoard.moves(),startBoard));
+        this.startBoard=(Board) startBoard.clone();
+        this.Warteschlange.add(new Tup<>(startBoard.moves(),(Board) startBoard.clone()));
     }
 
-    public void solve(){
+    /*public void solve(){
         while (Warteschlange.peek()!=null){
-            if(isInMap(Warteschlange.peek().getValue())){
-                Warteschlange.remove();
-            }
-            Board b=new Board();
+            Board b;
             while (Warteschlange.peek().getKey().peek()!=null){
 
                 //es muss das resultierende boardobjekt eingefügt werden welches seinen vorgänger kennt und die moveque gefüllt hat
@@ -35,20 +32,56 @@ public class Algorithm {
             if(Warteschlange.peek().getValue().getAstronaut().equals(Warteschlange.peek().getValue().getShip())){
                 this.solutions.add(Warteschlange.peek().getValue());
             }
-            Warteschlange.remove();
+            if(isInMap(Warteschlange.peek().getValue())){
+                Warteschlange.remove();
+            }
+            if(Warteschlange.size()>0){
+                Warteschlange.remove();
+            }
+
+
+
         }
         for(Board a: solutions.peek().getVorganger() ){
             System.out.println(a);
         }
     }
 
+    */
+    public void solve(){
+        while (Warteschlange.peek()!=null){
+            while (Warteschlange.peek().getKey().peek()!=null){
+                Board toCheck=(Board) Warteschlange.peek().getValue().clone();
+                Board firstResulting=(Board) toCheck.move(Warteschlange.peek().getKey().peek(),toCheck).clone();
+                firstResulting.addToVorganger(toCheck);
+                putInMap(toCheck.getSatelliten());
+                this.Warteschlange.add(new Tup<>(firstResulting.moves(),firstResulting));
+                this.Warteschlange.peek().getKey().remove();
+
+                if(Warteschlange.peek().getValue().getAstronaut().equals(Warteschlange.peek().getValue().getShip())){
+                    this.solutions.add((Board) Warteschlange.peek().getValue().clone());
+                }
+            }
+
+            if(isInMap(Warteschlange.peek().getValue())){
+                Warteschlange.remove();
+            }
+            if(Warteschlange.size()>0){
+                Warteschlange.remove();
+            }
+        }
+        for(Board a: solutions.peek().getVorganger() ){
+            System.out.println(a);
+        }
+    }
+    /*
     private Board move(Tupel<Koordinate> a,Board retur) {
         Board returnBoard=new Board(retur);
         Iterator<Koordinate> iterator = returnBoard.getSatelliten().iterator();
         int i=0;
         while (iterator.hasNext()) {
             if(iterator.next().equals(a.getFirst())){
-                returnBoard.getSatelliten().set(i,a.getSecond());
+                returnBoard.setSatellit(i,a.getSecond());
                 break;
             }
             i++;
@@ -65,7 +98,7 @@ public class Algorithm {
         return new Board(returnBoard);
     }
 
-
+*/
 
 
 

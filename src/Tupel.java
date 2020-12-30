@@ -1,4 +1,4 @@
-public class Tupel<k>extends Object {
+public class Tupel<k>extends Object implements Cloneable{
     private k first;
     private k second;
 
@@ -25,6 +25,16 @@ public class Tupel<k>extends Object {
 
     public void setSecond(k second) {
         this.second = second;
+    }
+
+    @Override
+    public Object clone(){
+        try {
+            return super.clone();
+        }catch (CloneNotSupportedException e){
+            System.out.println("cloning not allowed");
+            return this;
+        }
     }
 
     @Override

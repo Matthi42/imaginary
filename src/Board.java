@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Board {
+public class Board implements Cloneable{
     private char[][] board;
     private Koordinate ship;
     private LinkedList<Koordinate> satelliten;
@@ -20,7 +20,8 @@ public class Board {
         }
         this.ship = ship;
         satelliten.add(astronaut);
-        this.satelliten = satelliten;
+        this.satelliten = new LinkedList<>();
+        this.setSatelliten(satelliten);
         for (Koordinate a :
                 satelliten) {
             board[a.getX()][a.getY()] = 'S';
@@ -32,9 +33,14 @@ public class Board {
 
     public Board(Board b){
         this.board=b.getBoard();
-        this.astronaut=b.getAstronaut();
+        this.astronaut=new Koordinate();
+        this.setAstronaut(b.getAstronaut());
         this.ship=b.getShip();
-        this.satelliten=b.getSatelliten();
+        this.satelliten=new LinkedList<>();
+        for (Koordinate o:b.getSatelliten()) {
+            this.satelliten.add(o);
+        }
+        ;
     }
     public Board(){}
 
@@ -101,7 +107,7 @@ public class Board {
     }
 
 
-    public void move(Tupel<Koordinate> a) {
+    /*public void move(Tupel<Koordinate> a) {
         Iterator<Koordinate> iterator = satelliten.iterator();
         int i=0;
         while (iterator.hasNext()) {
@@ -117,8 +123,8 @@ public class Board {
             this.board[a.getSecond().getX()][a.getSecond().getY()]='A';
         this.board[a.getFirst().getX()][a.getFirst().getY()]=' ';
     }
-
-    public Board moveNew(Tupel<Koordinate> a,Board returnBoard) {
+*/
+    public Board move(Tupel<Koordinate> a,Board returnBoard) {
         Iterator<Koordinate> iterator = returnBoard.satelliten.iterator();
         int i=0;
         while (iterator.hasNext()) {
@@ -139,6 +145,7 @@ public class Board {
 
         return new Board(returnBoard);
     }
+
     public void setBoardKo(char a,int x,int y){
         char[][] b= new char[7][7];
 
@@ -156,6 +163,8 @@ public class Board {
         return satelliten;
     }
 
+
+
     public Koordinate getShip() {
         return ship;
     }
@@ -169,6 +178,7 @@ public class Board {
     }
 
     public void setVorganger(LinkedList<Board> vorganger) {
+
         this.vorganger = vorganger;
     }
 
@@ -192,13 +202,28 @@ public class Board {
         this.satelliten = satelliten;
     }
 
+    public void setSatellit(int i, Koordinate k){
+        this.satelliten.set(i,k);
+    }
+
     public void setAstronaut(Koordinate astronaut) {
-        this.astronaut = astronaut;
+        this.astronaut.setX(astronaut.getX());
+        this.astronaut.setY(astronaut.getY());
     }
 
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+
+    @Override
+    public Object clone(){
+        try {
+            return super.clone();
+        }catch (CloneNotSupportedException e){
+            System.out.println("cloning not allowed");
+            return this;
+        }
     }
 
     @Override
